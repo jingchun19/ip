@@ -2,44 +2,35 @@ import java.util.Objects;
 import java.util.Scanner;
 
 public class JacobMalon {
-
-    public static void displayList(String[] itemList, int count) {
-        String itemString = "";
-        for (int i = 0; i < count; i++) {
-            int listNumber = i + 1;
-            itemString += listNumber + ". " + itemList[i] + "\n";
-        }
-        System.out.println(itemString);
+    private static final String CHATBOT_NAME = "Aiden";
+    private final TaskManager taskManager;
+    public JacobMalon() {
+        this.taskManager = new TaskManager();
     }
-    public static void input() {
-        boolean isEnd = false;
-        boolean isList = false;
-        Scanner scn = new Scanner(System.in);
-        String[] itemArray = new String[100];
-        int counter = 0;
-        while (!isEnd) {
-            String inputFromUser = scn.nextLine();
-            isEnd = Objects.equals(inputFromUser, "bye");
-            isList = Objects.equals(inputFromUser, "list");
-            if (isEnd) {
+    public void run() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Hello! I'm " + CHATBOT_NAME);
+        System.out.println("What can I do for you?");
+
+        while (true) {
+            String command = scanner.nextLine();
+            if (command.equals("bye")) {
+                System.out.println("Bye. Hope to see you again soon!");
                 break;
-            } else if (isList) {
-                displayList(itemArray, counter);
-                continue;
+            } else if (command.equals("list")) {
+                taskManager.listTasks();
+            } else if (command.startsWith("mark ")) {
+                taskManager.markTask(Integer.parseInt(command.split(" ")[1]));
+            } else if (command.startsWith("unmark ")) {
+                taskManager.unmarkTask(Integer.parseInt(command.split(" ")[1]));
+            } else {
+                System.out.println("I'm sorry, but I don't understand that command.");
             }
-            itemArray[counter] = inputFromUser;
-            System.out.println("added: " + inputFromUser);
-            counter++;
         }
+        scanner.close();
     }
-
 
     public static void main(String[] args) {
-        String greet = "Hello! I'm JacobMalon \n" +
-                "What can I do for you? \n";
-        String exit = "Bye. Hope to see you again!";
-        System.out.println(greet);
-        input();
-        System.out.println(exit);
+        new JacobMalon().run();
     }
 }
