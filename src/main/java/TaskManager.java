@@ -42,5 +42,15 @@ public class TaskManager {
         System.out.println("  " + tasks.get(index - 1));
     }
 
+    public void deleteTask(int index) {
+        if (index < 1 || index > tasks.size()) {
+            System.out.println("Invalid task number!");
+            return;
+        }
+        Task removedTask = tasks.remove(index - 1);
+        System.out.println("Noted. I've removed this task:");
+        System.out.println("  " + removedTask);
+        System.out.println("Now you have " + tasks.size() + " tasks in the list.");
+    }
 
 }
