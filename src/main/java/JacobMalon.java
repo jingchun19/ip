@@ -23,6 +23,14 @@ public class JacobMalon {
                 taskManager.markTask(Integer.parseInt(command.split(" ")[1]));
             } else if (command.startsWith("unmark ")) {
                 taskManager.unmarkTask(Integer.parseInt(command.split(" ")[1]));
+            } else if (command.startsWith("todo ")) {
+                taskManager.addTask(new ToDo(command.substring(5)));
+            } else if (command.startsWith("deadline ")) {
+                String[] parts = command.substring(9).split(" /by ", 2);
+                taskManager.addTask(new Deadline(parts[0], parts[1]));
+            } else if (command.startsWith("event ")) {
+                String[] parts = command.substring(6).split(" /from | /to ", 3);
+                taskManager.addTask(new Event(parts[0], parts[1], parts[2]));
             } else {
                 System.out.println("I'm sorry, but I don't understand that command.");
             }
