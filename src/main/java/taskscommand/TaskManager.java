@@ -1,9 +1,19 @@
+package taskscommand;
+
 import java.io.*;
 import java.util.ArrayList;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.stream.Collectors;
+import java.time.format.DateTimeParseException;
+import java.util.List;
 
 public class TaskManager {
     private ArrayList<Task> tasks;
     private static final String FILE_PATH = "data/list.TXT";
+    private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("d/M/yyyy");
+    private static final DateTimeFormatter INPUT_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+    private static final DateTimeFormatter OUTPUT_FORMATTER = DateTimeFormatter.ofPattern("MMM dd yyyy");
 
     public TaskManager() {
         tasks = new ArrayList<>();
@@ -33,7 +43,9 @@ public class TaskManager {
                     tasks.add(new ToDo(line.substring(7)));
                 } else if (line.startsWith("[D]")) {
                     String[] parts = line.split(" \\(by: ");
-                    tasks.add(new Deadline(parts[0].substring(7), parts[1].substring(0, parts[1].length() - 1)));
+                    String description = parts[0].substring(7);
+                    String dateStr = parts[1].substring(0, parts[1].length() - 1);
+                    tasks.add(new Deadline(description, dateStr));
                 } else if (line.startsWith("[E]")) {
                     String[] parts = line.split(" \\(from: | to: ");
                     tasks.add(new Event(parts[0].substring(7), parts[1], parts[2].substring(0, parts[2].length() - 1)));
@@ -96,6 +108,28 @@ public class TaskManager {
         System.out.println("Here are the tasks in your list:");
         for (int i = 0; i < tasks.size(); i++) {
             System.out.println((i + 1) + "." + tasks.get(i));
+        }
+    }
+
+    // Add new method to list tasks by date
+    public void listTasksByDate(String date) {
+        try {
+            LocalDate queryDate = LocalDate.parse(date, INPUT_FORMATTER);
+            List<Task> tasksOnDate = tasks.stream()
+                .filter(task -> task instanceof Deadline)
+                .map(task -> (Deadline) task)
+                .filter(deadline -> deadline.getDeadline().equals(queryDate))
+                .collect(Collectors.toList());
+            if (tasksOnDate.isEmpty()) {
+                System.out.println("No tasks due on " + queryDate.format(OUTPUT_FORMATTER));
+                return;
+            }
+            System.out.println("Here are the tasks due on " + queryDate.format(OUTPUT_FORMATTER) + ":");
+            for (int i = 0; i < tasksOnDate.size(); i++) {
+                System.out.println((i + 1) + "." + tasksOnDate.get(i));
+            }
+        } catch (DateTimeParseException e) {
+            System.out.println("Please enter date in the format: yyyy-MM-dd (e.g., 2019-10-15)");
         }
     }
 }

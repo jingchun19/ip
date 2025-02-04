@@ -1,4 +1,5 @@
 import java.util.Scanner;
+import taskscommand.*;
 
 public class JacobMalon {
     private static final String CHATBOT_NAME = "Jacob";
@@ -37,7 +38,13 @@ public class JacobMalon {
                         taskManager.addTask(new ToDo(taskDescription));
                     } else if (command.startsWith("deadline ")) {
                         String[] parts = command.substring(9).split(" /by ", 2);
+                        if (parts.length < 2) {
+                            throw new IllegalArgumentException("deadline command must be followed by description and date (e.g., deadline return book /by 2019-10-15)");
+                        }
                         taskManager.addTask(new Deadline(parts[0], parts[1]));
+                    } else if (command.startsWith("list date ")) {
+                        String date = command.substring(10).trim();
+                        taskManager.listTasksByDate(date);
                     } else if (command.startsWith("event ")) {
                         String[] parts = command.substring(6).split(" /from | /to ", 3);
                         taskManager.addTask(new Event(parts[0], parts[1], parts[2]));
