@@ -1,19 +1,20 @@
 package taskscommand;
 
 import java.io.*;
-import java.util.ArrayList;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.stream.Collectors;
 import java.time.format.DateTimeParseException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class TaskManager {
     private ArrayList<Task> tasks;
     private static final String FILE_PATH = "data/list.TXT";
-    private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("d/M/yyyy");
-    private static final DateTimeFormatter INPUT_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-    private static final DateTimeFormatter OUTPUT_FORMATTER = DateTimeFormatter.ofPattern("MMM dd yyyy");
+    private static final DateTimeFormatter INPUT_FORMATTER = DateTimeFormatter.ofPattern("d/M/yyyy HHmm");
+    private static final DateTimeFormatter OUTPUT_FORMATTER = DateTimeFormatter.ofPattern("MMM d yyyy, h:mma");
+
 
     public TaskManager() {
         tasks = new ArrayList<>();
@@ -27,7 +28,7 @@ public class TaskManager {
             if (!directory.exists()) {
                 directory.mkdir();
             }
-            
+
             File file = new File(FILE_PATH);
             if (!file.exists()) {
                 file.createNewFile();
@@ -37,18 +38,26 @@ public class TaskManager {
             BufferedReader reader = new BufferedReader(new FileReader(file));
             String line;
             while ((line = reader.readLine()) != null) {
-                // Parse the line and create appropriate task
-                // This is a basic implementation - you might want to enhance it
-                if (line.startsWith("[T]")) {
-                    tasks.add(new ToDo(line.substring(7)));
-                } else if (line.startsWith("[D]")) {
-                    String[] parts = line.split(" \\(by: ");
-                    String description = parts[0].substring(7);
-                    String dateStr = parts[1].substring(0, parts[1].length() - 1);
-                    tasks.add(new Deadline(description, LocalDate.parse(dateStr, OUTPUT_FORMATTER).format(INPUT_FORMATTER)));
-                } else if (line.startsWith("[E]")) {
-                    String[] parts = line.split(" \\(from: | to: ");
-                    tasks.add(new Event(parts[0].substring(7), parts[1], parts[2].substring(0, parts[2].length() - 1)));
+                try {
+                    if (line.startsWith("[T]")) {
+                        tasks.add(new ToDo(line.substring(7)));
+                    } else if (line.startsWith("[D]")) {
+                        int descEndIndex = line.indexOf(" (by: ");
+                        if (descEndIndex == -1) {
+                            throw new IllegalArgumentException("Invalid deadline format: " + line);
+                        }
+                        String description = line.substring(7, descEndIndex);
+                        String dateStr = line.substring(descEndIndex + 6, line.length() - 1); // Remove ")"
+
+                        // Adjust date parsing based on stored format
+                        LocalDateTime parsedDate = LocalDateTime.parse(dateStr, DateTimeFormatter.ofPattern("MMM dd yyyy, h:mma"));
+                        tasks.add(new Deadline(description, parsedDate.format(DateTimeFormatter.ofPattern("d/M/yyyy HHmm"))));
+                    } else if (line.startsWith("[E]")) {
+                        String[] parts = line.split(" \\(from: | to: ");
+                        tasks.add(new Event(parts[0].substring(7), parts[1], parts[2].substring(0, parts[2].length() - 1)));
+                    }
+                } catch (Exception e) {
+                    System.out.println("Error parsing task: " + line + " - " + e.getMessage());
                 }
             }
             reader.close();
@@ -56,6 +65,7 @@ public class TaskManager {
             System.out.println("Error loading from file: " + e.getMessage());
         }
     }
+
 
     // Add this method to save tasks to file
     private void saveToFile() {
