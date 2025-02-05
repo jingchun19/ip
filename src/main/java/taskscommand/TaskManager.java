@@ -142,4 +142,23 @@ public class TaskManager {
             System.out.println("Please enter date in the format: yyyy-MM-dd (e.g., 2019-10-15)");
         }
     }
+
+    /**
+     * Finds and lists tasks that contain the specified keyword.
+     * @param keyword The keyword to search for in task descriptions.
+     */
+    public void findTasks(String keyword) {
+        List<Task> matchingTasks = tasks.stream()
+            .filter(task -> task.getDescription().contains(keyword))
+            .collect(Collectors.toList());
+
+        if (matchingTasks.isEmpty()) {
+            System.out.println("No matching tasks found.");
+        } else {
+            System.out.println("Here are the matching tasks in your list:");
+            for (int i = 0; i < matchingTasks.size(); i++) {
+                System.out.println((i + 1) + "." + matchingTasks.get(i));
+            }
+        }
+    }
 }

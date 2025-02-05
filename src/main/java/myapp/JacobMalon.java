@@ -50,6 +50,9 @@ public class JacobMalon {
                     } else if (command.startsWith("event ")) {
                         String[] parts = command.substring(6).split(" /from | /to ", 3);
                         taskManager.addTask(new Event(parts[0], parts[1], parts[2]));
+                    } else if (command.startsWith("find ")) {
+                        String keyword = command.substring(5).trim();
+                        taskManager.findTasks(keyword);
                     } else {
                         throw new IllegalArgumentException("I'm sorry, but I don't understand that command.");
                     }
