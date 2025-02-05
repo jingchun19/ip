@@ -45,7 +45,7 @@ public class TaskManager {
                     String[] parts = line.split(" \\(by: ");
                     String description = parts[0].substring(7);
                     String dateStr = parts[1].substring(0, parts[1].length() - 1);
-                    tasks.add(new Deadline(description, dateStr));
+                    tasks.add(new Deadline(description, LocalDate.parse(dateStr, OUTPUT_FORMATTER).format(INPUT_FORMATTER)));
                 } else if (line.startsWith("[E]")) {
                     String[] parts = line.split(" \\(from: | to: ");
                     tasks.add(new Event(parts[0].substring(7), parts[1], parts[2].substring(0, parts[2].length() - 1)));

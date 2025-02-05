@@ -1,3 +1,5 @@
+package myapp;
+
 import java.util.Scanner;
 import taskscommand.*;
 
