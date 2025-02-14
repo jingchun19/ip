@@ -1,9 +1,6 @@
 plugins {
     id 'java'
     id 'application'
-    id 'checkstyle'
-    id 'com.github.johnrengelman.shadow' version '7.1.2'
-    id 'org.openjfx.javafxplugin' version '0.0.13'
     id 'com.github.johnrengelman.shadow' version '7.1.2'
 }
 
@@ -11,43 +8,32 @@ repositories {
     mavenCentral()
 }
 
-javafx {
-    version = "17.0.14"
-    modules = [ 'javafx.controls', 'javafx.fxml', 'javafx.graphics' ]
-}
-
 dependencies {
-    // JUnit 5 dependencies
-    testImplementation 'org.junit.jupiter:junit-jupiter:5.9.3'
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.9.2'
-
-    testImplementation 'org.junit.jupiter:junit-jupiter:5.9.3'
+    String javaFxVersion = '17.0.7'
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.9.3'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.9.3'
-
-    // Mockito for mocking in tests
-    testImplementation 'org.mockito:mockito-core:5.7.0'
-    testImplementation 'org.mockito:mockito-junit-jupiter:5.7.0'
-
-    // JavaFX dependencies
-    implementation "org.openjfx:javafx-base:17.0.14:win"
-    implementation "org.openjfx:javafx-controls:17.0.14:win"
-    implementation "org.openjfx:javafx-fxml:17.0.14:win"
-    implementation "org.openjfx:javafx-graphics:17.0.14:win"
-
-    // Ensure the project uses JUnit 5
-    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.9.2'
-}
-
-tasks.withType(JavaCompile) {
-    options.encoding = 'UTF-8'
+    implementation 'org.openjfx:javafx-controls:17.0.2.1'
+    implementation 'org.openjfx:javafx-fxml:17.0.2.1'
+    implementation group: 'org.openjfx', name: 'javafx-base', version: javaFxVersion, classifier: 'win'
+    implementation group: 'org.openjfx', name: 'javafx-base', version: javaFxVersion, classifier: 'mac'
+    implementation group: 'org.openjfx', name: 'javafx-base', version: javaFxVersion, classifier: 'linux'
+    implementation group: 'org.openjfx', name: 'javafx-controls', version: javaFxVersion, classifier: 'win'
+    implementation group: 'org.openjfx', name: 'javafx-controls', version: javaFxVersion, classifier: 'mac'
+    implementation group: 'org.openjfx', name: 'javafx-controls', version: javaFxVersion, classifier: 'linux'
+    implementation group: 'org.openjfx', name: 'javafx-fxml', version: javaFxVersion, classifier: 'win'
+    implementation group: 'org.openjfx', name: 'javafx-fxml', version: javaFxVersion, classifier: 'mac'
+    implementation group: 'org.openjfx', name: 'javafx-fxml', version: javaFxVersion, classifier: 'linux'
+    implementation group: 'org.openjfx', name: 'javafx-graphics', version: javaFxVersion, classifier: 'win'
+    implementation group: 'org.openjfx', name: 'javafx-graphics', version: javaFxVersion, classifier: 'mac'
+    implementation group: 'org.openjfx', name: 'javafx-graphics', version: javaFxVersion, classifier: 'linux'
 }
 
 test {
     useJUnitPlatform()
+
     testLogging {
         events "passed", "skipped", "failed"
+
         showExceptions true
         exceptionFormat "full"
         showCauses true
@@ -57,20 +43,15 @@ test {
 }
 
 application {
-    mainClass = 'vegetables.gui.Launcher'
+    mainClass.set("myapp.Launcher")
 }
 
 shadowJar {
-    archiveBaseName = 'veggie'
+    archiveBaseName = "JacobMalon"
     archiveClassifier = null
-    mergeServiceFiles()
-    exclude 'module-info.class'
-    manifest {
-        attributes 'Main-Class': 'vegetables.gui.Launcher'
-    }
+    archiveFileName = 'JacobMalon.jar'
 }
 
-checkstyle {
-    toolVersion = '10.2'
+run{
+    standardInput = System.in
 }
-
