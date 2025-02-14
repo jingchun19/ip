@@ -9,10 +9,6 @@
 src/main/resources/docs/
 caches/
 daemon/
-data/
-gradle/
-wrapper/
-native/
 
 # Ignore compiled Java class files
 *.class
