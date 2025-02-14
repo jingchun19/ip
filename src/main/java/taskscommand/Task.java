@@ -1,7 +1,7 @@
 package taskscommand;
 
 public class Task {
-    //Task Name
+    //Task Name, IMPORTANT
     protected String description;
     protected boolean isDone;
 
