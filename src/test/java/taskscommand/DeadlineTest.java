@@ -1,4 +1,4 @@
-package test.java.taskscommand;
+package taskscommand;
 
 public class DeadlineTest {
 }
