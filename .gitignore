@@ -8,6 +8,7 @@
 /build/
 src/main/resources/docs/
 caches/
+daemon/
 
 # Ignore compiled Java class files
 *.class
