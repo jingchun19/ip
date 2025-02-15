@@ -1,7 +1,9 @@
 package taskscommand;
 
 public class Event extends Task{
+    //Date start
     protected String from;
+    //Date end
     protected String to;
 
     public Event(String description, String from, String to) {
