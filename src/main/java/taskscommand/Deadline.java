@@ -21,7 +21,9 @@ public class Deadline extends Task {
      */
     public Deadline(String description, String by) throws DateTimeParseException {
         super(description);
+        assert by != null && !by.trim().isEmpty() : "Deadline date/time cannot be null or empty";
         this.by = LocalDateTime.parse(by, INPUT_FORMATTER);
+        assert this.by != null : "Deadline date/time parsing failed";
     }
 
     /**
@@ -29,11 +31,13 @@ public class Deadline extends Task {
      * @return The deadline date and time.
      */
     public LocalDateTime getDeadline() {
+        assert by != null : "Deadline date/time should never be null";
         return by;
     }
 
     @Override
     public String toString() {
+        assert by != null : "Deadline date/time should never be null";
         return "[D]" + super.toString() + " (by: " + by.format(OUTPUT_FORMATTER) + ")";
     }
 }
