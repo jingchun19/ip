@@ -20,6 +20,8 @@ public class TaskManager {
     private static final String TASK_DELETED_MESSAGE = "Noted. I've removed this task:";
     private static final String TASK_MARKED_MESSAGE = "Nice! I've marked this task as done:";
     private static final String TASK_UNMARKED_MESSAGE = "Okay! I've marked this task as not done:";
+    private static final String DUPLICATE_TASK_MESSAGE = "This task already exists in your list!";
+    private static final String DUPLICATE_TASK_ADDED_ANYWAY = "Adding it anyway as requested.";
     
     private final ArrayList<Task> tasks;
     private final DateTimeFormatter formatter;
@@ -31,10 +33,46 @@ public class TaskManager {
     }
 
     /**
+     * Checks if a task is a duplicate of an existing task.
+     * A task is considered a duplicate if it has the same description
+     * and, in case of Deadline/Event tasks, the same timing.
+     */
+    private boolean isDuplicate(Task newTask) {
+        return tasks.stream().anyMatch(existingTask -> {
+            if (!existingTask.getDescription().equals(newTask.getDescription())) {
+                return false;
+            }
+            
+            // For Deadline tasks, check the deadline timing
+            if (existingTask instanceof Deadline && newTask instanceof Deadline) {
+                return ((Deadline) existingTask).getDeadline()
+                    .equals(((Deadline) newTask).getDeadline());
+            }
+            
+            // For Event tasks, check both start and end timing
+            if (existingTask instanceof Event && newTask instanceof Event) {
+                Event existing = (Event) existingTask;
+                Event newEvent = (Event) newTask;
+                return existing.getFrom().equals(newEvent.getFrom()) 
+                    && existing.getTo().equals(newEvent.getTo());
+            }
+            
+            // For Todo tasks, description equality is sufficient
+            return true;
+        });
+    }
+
+    /**
      * Adds a new task to the list and saves to storage.
+     * If the task is a duplicate, warns the user but adds it anyway.
      */
     public void addTask(Task task) {
         assert task != null : "Task cannot be null";
+        
+        if (isDuplicate(task)) {
+            System.out.println(DUPLICATE_TASK_MESSAGE);
+            System.out.println(DUPLICATE_TASK_ADDED_ANYWAY);
+        }
         
         tasks.add(task);
         System.out.println(TASK_ADDED_MESSAGE);
