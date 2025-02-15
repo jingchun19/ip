@@ -30,7 +30,7 @@ public class DeadlineTest {
     public void toString_correctFormat() {
         // Test string representation
         Deadline deadline = new Deadline("Return book", "2/12/2023 1800");
-        String expected = "[D][ ] Return book (by: Dec 2 2023, 6:00PM)";
+        String expected = "[D][ ] Return book (by: Dec 2 2023, 6:00pm)";
         assertEquals(expected, deadline.toString());
     }
 }
