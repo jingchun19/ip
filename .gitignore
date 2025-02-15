@@ -7,8 +7,6 @@
 /.gradle/
 /build/
 src/main/resources/docs/
-caches/
-daemon/
 
 # Ignore compiled Java class files
 *.class
@@ -17,6 +15,12 @@ daemon/
 .DS_Store
 *.iml
 bin/
+/native/
+/caches/
+/daemon/
 
 /text-ui-test/ACTUAL.TXT
 text-ui-test/EXPECTED-UNIX.TXT
+
+# Data files
+/data/
