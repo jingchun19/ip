@@ -7,6 +7,10 @@
 /.gradle/
 /build/
 src/main/resources/docs/
+caches/
+wrapper/
+daemon/
+native/
 
 # Ignore compiled Java class files
 *.class
