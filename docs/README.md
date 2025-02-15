@@ -1,30 +1,99 @@
-# Duke User Guide
+# JacobMalon Task Manager
 
-// Update the title above to match the actual product name
+A Java desktop application for managing tasks, built with JavaFX.
 
-// Product screenshot goes here
+## Features
 
-// Product intro goes here
+- **Task Management**: Create, update, and delete tasks
+- **Multiple Task Types**:
+    - Todo tasks
+    - Deadline tasks (with date and time)
+    - Event tasks (with start and end times)
+- **Task Status**: Mark tasks as done/undone
+- **Search**: Find tasks by keywords
+- **Persistence**: Tasks are automatically saved to disk
 
-## Adding deadlines
+## Getting Started
 
-// Describe the action and its outcome.
+### Prerequisites
 
-// Give examples of usage
+- JDK 17 or later
+- Gradle (included in wrapper)
+- JavaFX (included in dependencies)
 
-Example: `keyword (optional arguments)`
+### Setup
 
-// A description of the expected outcome goes here
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/yourusername/JacobMalon.git
+   ```
+
+2. Navigate to the project directory:
+   ```bash
+   cd JacobMalon
+   ```
+
+3. Run the application:
+   ```bash
+   ./gradlew run
+   ```
+
+## Usage
+
+The application supports the following commands:
+
+| Command | Format | Example |
+|---------|---------|---------|
+| Add todo | `todo DESCRIPTION` | `todo read book` |
+| Add deadline | `deadline DESCRIPTION /by DATE TIME` | `deadline return book /by 2/12/2023 1800` |
+| Add event | `event DESCRIPTION /from START /to END` | `event meeting /from 2pm /to 4pm` |
+| List tasks | `list` | `list` |
+| Mark as done | `mark INDEX` | `mark 1` |
+| Mark as not done | `unmark INDEX` | `unmark 1` |
+| Delete task | `delete INDEX` | `delete 1` |
+| Find tasks | `find KEYWORD` | `find book` |
+| Exit | `bye` | `bye` |
+
+## Development
+
+### Project Structure
 
 ```
-expected output
+src
+├── main
+│   ├── java
+│   │   └── myapp
+│   │       ├── JacobMalon.java
+│   │       ├── Main.java
+│   │       └── taskscommand
+│   │           ├── Task.java
+│   │           ├── ToDo.java
+│   │           ├── Deadline.java
+│   │           └── Event.java
+│   └── resources
+│       └── view
+│           └── MainWindow.fxml
+└── test
+    └── java
+        └── taskscommand
+            ├── TaskTest.java
+            └── DeadlineTest.java
 ```
 
-## Feature ABC
+### Running Tests
 
-// Feature details
+```bash
+./gradlew test
+```
 
+### Building JAR
 
-## Feature XYZ
+```bash
+./gradlew shadowJar
+```
 
-// Feature details
+The JAR file will be created in `build/libs/JacobMalon.jar`
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
