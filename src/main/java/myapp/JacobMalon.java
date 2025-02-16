@@ -44,7 +44,7 @@ public class JacobMalon {
                 if (parts.length < 2) {
                     throw new IllegalArgumentException("mark command must be followed by a task number.");
                 }
-                // CHANGED: Append the result from taskManager.markTask instead of printing.
+                // Append the result from taskManager.markTask instead of printing.
                 response.append(taskManager.markTask(Integer.parseInt(parts[1])));
             } else if (input.startsWith("unmark ")) {
                 // CHANGED: Append the result from taskManager.unmarkTask.
