@@ -66,95 +66,103 @@ public class TaskManager {
      * Adds a new task to the list and saves to storage.
      * If the task is a duplicate, warns the user but adds it anyway.
      */
-    public void addTask(Task task) {
+    public String addTask(Task task) {
         assert task != null : "Task cannot be null";
         
+        StringBuilder response = new StringBuilder();
         if (isDuplicate(task)) {
-            System.out.println(DUPLICATE_TASK_MESSAGE);
-            System.out.println(DUPLICATE_TASK_ADDED_ANYWAY);
+            response.append(DUPLICATE_TASK_MESSAGE).append("\n");
+            response.append(DUPLICATE_TASK_ADDED_ANYWAY).append("\n");
         }
         
         tasks.add(task);
-        System.out.println(TASK_ADDED_MESSAGE);
-        System.out.println(task);
-        System.out.println("Now you have " + tasks.size() + " tasks in the list.");
+        response.append(TASK_ADDED_MESSAGE).append("\n");
+        response.append(task).append("\n");
+        response.append("Now you have " + tasks.size() + " tasks in the list.");
         saveToFile();
+        return response.toString();
     }
 
     /**
      * Deletes a task at the specified index.
      */
-    public void deleteTask(int index) {
+    public String deleteTask(int index) {
         validateTaskIndex(index);
         
         Task deletedTask = tasks.remove(index - 1);
-        System.out.println(TASK_DELETED_MESSAGE);
-        System.out.println(deletedTask);
+        StringBuilder response = new StringBuilder();
+        response.append(TASK_DELETED_MESSAGE).append("\n");
+        response.append(deletedTask);
         saveToFile();
+        return response.toString();
     }
 
     /**
      * Marks a task as done at the specified index.
      */
-    public void markTask(int index) {
+    public String markTask(int index) {
         validateTaskIndex(index);
         
         Task task = tasks.get(index - 1);
         task.markAsDone();
-        System.out.println(TASK_MARKED_MESSAGE);
-        System.out.println(task);
+        StringBuilder response = new StringBuilder();
+        response.append(TASK_MARKED_MESSAGE).append("\n");
+        response.append(task);
         saveToFile();
+        return response.toString();
     }
 
     /**
      * Marks a task as not done at the specified index.
      */
-    public void unmarkTask(int index) {
+    public String unmarkTask(int index) {
         validateTaskIndex(index);
         
         Task task = tasks.get(index - 1);
         task.markAsNotDone();
-        System.out.println(TASK_UNMARKED_MESSAGE);
-        System.out.println(task);
+        StringBuilder response = new StringBuilder();
+        response.append(TASK_UNMARKED_MESSAGE).append("\n");
+        response.append(task);
         saveToFile();
+        return response.toString();
     }
 
     /**
      * Lists all tasks in the list.
      */
-    public void listTasks() {
+    public String listTasks() {
         if (tasks.isEmpty()) {
-            System.out.println("No tasks in the list.");
-            return;
+            return "No tasks in the list.";
         }
 
-        System.out.println("Here are the tasks in your list:");
+        StringBuilder response = new StringBuilder("Here are the tasks in your list:\n");
         for (int i = 0; i < tasks.size(); i++) {
-            System.out.println((i + 1) + "." + tasks.get(i));
+            response.append(String.format("%d.%s\n", i + 1, tasks.get(i)));
         }
+        return response.toString().trim();
     }
 
     /**
      * Lists tasks with the specified date.
      */
-    public void listTasksByDate(String dateStr) {
+    public String listTasksByDate(String dateStr) {
         List<Task> matchingTasks = findTasksByDate(dateStr);
         
         if (matchingTasks.isEmpty()) {
-            System.out.println("No tasks found for the specified date.");
-            return;
+            return "No tasks found for the specified date.";
         }
 
-        System.out.println("Here are the tasks for " + dateStr + ":");
+        StringBuilder response = new StringBuilder("Here are the tasks for " + dateStr + ":\n");
         for (int i = 0; i < matchingTasks.size(); i++) {
-            System.out.println((i + 1) + "." + matchingTasks.get(i));
+            response.append(String.format("%d.%s\n", i + 1, matchingTasks.get(i)));
         }
+        return response.toString().trim();
     }
 
     /**
      * Finds tasks containing the specified keyword.
      */
-    public void findTasks(String keyword) {
+    public String findTasks(String keyword) {
         assert keyword != null && !keyword.trim().isEmpty() : "Search keyword cannot be empty";
         
         List<Task> matchingTasks = tasks.stream()
@@ -162,7 +170,7 @@ public class TaskManager {
                 .contains(keyword.toLowerCase()))
             .collect(Collectors.toList());
 
-        displaySearchResults(matchingTasks, keyword);
+        return displaySearchResults(matchingTasks, keyword);
     }
 
     // Private helper methods
@@ -181,16 +189,16 @@ public class TaskManager {
             .collect(Collectors.toList());
     }
 
-    private void displaySearchResults(List<Task> matchingTasks, String keyword) {
+    private String displaySearchResults(List<Task> matchingTasks, String keyword) {
         if (matchingTasks.isEmpty()) {
-            System.out.println("No matching tasks found for: " + keyword);
-            return;
+            return "No matching tasks found for: " + keyword;
         }
 
-        System.out.println("Here are the matching tasks in your list:");
+        StringBuilder response = new StringBuilder("Here are the matching tasks in your list:\n");
         for (int i = 0; i < matchingTasks.size(); i++) {
-            System.out.println((i + 1) + "." + matchingTasks.get(i));
+            response.append(String.format("%d.%s\n", i + 1, matchingTasks.get(i)));
         }
+        return response.toString().trim();
     }
 
     // File operations

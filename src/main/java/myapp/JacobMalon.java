@@ -27,38 +27,47 @@ public class JacobMalon {
             if (input.equals("bye")) {
                 response.append("Bye. Hope to see you again soon!");
             } else if (input.equals("list")) {
-                taskManager.listTasks();
+                // CHANGED: Now using taskManager.listTasks() that returns a string instead of printing to the terminal.
+                response.append(taskManager.listTasks());
             } else if (input.startsWith("mark ")) {
                 String[] parts = input.split(" ");
                 if (parts.length < 2) {
                     throw new IllegalArgumentException("mark command must be followed by a task number.");
                 }
-                taskManager.markTask(Integer.parseInt(parts[1]));
+                // CHANGED: Append the result from taskManager.markTask instead of printing.
+                response.append(taskManager.markTask(Integer.parseInt(parts[1])));
             } else if (input.startsWith("unmark ")) {
-                taskManager.unmarkTask(Integer.parseInt(input.split(" ")[1]));
+                // CHANGED: Append the result from taskManager.unmarkTask.
+                response.append(taskManager.unmarkTask(Integer.parseInt(input.split(" ")[1])));
             } else if (input.startsWith("delete ")) {
-                taskManager.deleteTask(Integer.parseInt(input.split(" ")[1]));
+                // CHANGED: Append the result from taskManager.deleteTask.
+                response.append(taskManager.deleteTask(Integer.parseInt(input.split(" ")[1])));
             } else if (input.startsWith("todo ")) {
                 String taskDescription = input.substring(5).trim();
                 if (taskDescription.isEmpty()) {
                     throw new IllegalArgumentException("The description of a todo cannot be empty.");
                 }
-                taskManager.addTask(new ToDo(taskDescription));
+                // CHANGED: Append the result from taskManager.addTask for a new ToDo.
+                response.append(taskManager.addTask(new ToDo(taskDescription)));
             } else if (input.startsWith("deadline ")) {
                 String[] parts = input.substring(9).split(" /by ", 2);
                 if (parts.length < 2) {
                     throw new IllegalArgumentException("deadline command must be followed by description and date (e.g., deadline return book /by 2019-10-15)");
                 }
-                taskManager.addTask(new Deadline(parts[0], parts[1]));
+                // CHANGED: Append the result from taskManager.addTask for a new Deadline.
+                response.append(taskManager.addTask(new Deadline(parts[0], parts[1])));
             } else if (input.startsWith("list date ")) {
                 String date = input.substring(10).trim();
-                taskManager.listTasksByDate(date);
+                // CHANGED: Append the result from taskManager.listTasksByDate.
+                response.append(taskManager.listTasksByDate(date));
             } else if (input.startsWith("event ")) {
                 String[] parts = input.substring(6).split(" /from | /to ", 3);
-                taskManager.addTask(new Event(parts[0], parts[1], parts[2]));
+                // CHANGED: Append the result from taskManager.addTask for a new Event.
+                response.append(taskManager.addTask(new Event(parts[0], parts[1], parts[2])));
             } else if (input.startsWith("find ")) {
                 String keyword = input.substring(5).trim();
-                taskManager.findTasks(keyword);
+                // CHANGED: Append the result from taskManager.findTasks.
+                response.append(taskManager.findTasks(keyword));
             } else {
                 throw new IllegalArgumentException("I'm sorry, but I don't understand that command.");
             }
@@ -72,7 +81,5 @@ public class JacobMalon {
         JacobMalon chatbot = new JacobMalon();
         System.out.println("Hello! I'm " + CHATBOT_NAME);
         System.out.println("What can I do for you?");
-        // Example usage
-        System.out.println(chatbot.getResponse("todo read book"));
     }
 }
