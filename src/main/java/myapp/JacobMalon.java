@@ -75,7 +75,7 @@ public class JacobMalon {
                 response.append(taskManager.addTask(new Deadline(parts[0], parts[1])));
             } else if (input.startsWith("list date ")) {
                 String date = input.substring(10).trim();
-                // CHANGED: Append the result from taskManager.listTasksByDate.
+                // Append the result from taskManager.listTasksByDate.
                 response.append(taskManager.listTasksByDate(date));
             } else if (input.startsWith("event ")) {
                 String[] parts = input.substring(6).split(" /from | /to ", 3);
