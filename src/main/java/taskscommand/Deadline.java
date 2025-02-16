@@ -23,7 +23,7 @@ public class Deadline extends Task {
         super(description);
         assert by != null && !by.trim().isEmpty() : "Deadline date/time cannot be null or empty";
         this.by = LocalDateTime.parse(by, INPUT_FORMATTER);
-        assert this.by != null : "Deadline date/time parsing failed";
+        assert this.by != null : "deadline command must be followed by description and date (e.g., deadline return book /by 2/12/2023 1800)";
     }
 
     /**

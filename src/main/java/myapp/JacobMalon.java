@@ -1,5 +1,9 @@
 package myapp;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+
 import taskscommand.Deadline;
 import taskscommand.Event;
 import taskscommand.TaskManager;
@@ -12,6 +16,7 @@ public class JacobMalon {
     private static final String CHATBOT_NAME = "Jacob";
     private final TaskManager taskManager;
     public boolean isExit = false;
+    private static final DateTimeFormatter INPUT_FORMATTER = DateTimeFormatter.ofPattern("d/M/yyyy HHmm");
 
     /**
      * Constructs a new JacobMalon instance.
@@ -30,7 +35,7 @@ public class JacobMalon {
         try {
             if (input.equals("bye")) {
                 response.append("Bye. Hope to see you again soon!");
-                isExit = true;
+                System.exit(0);
             } else if (input.equals("list")) {
                 // CHANGED: Now using taskManager.listTasks() that returns a string instead of printing to the terminal.
                 response.append(taskManager.listTasks());
@@ -57,9 +62,16 @@ public class JacobMalon {
             } else if (input.startsWith("deadline ")) {
                 String[] parts = input.substring(9).split(" /by ", 2);
                 if (parts.length < 2) {
-                    throw new IllegalArgumentException("deadline command must be followed by description and date (e.g., deadline return book /by 2019-10-15)");
+                    throw new IllegalArgumentException(
+                        "deadline command must be followed by description and date (e.g., deadline return book /by 2/12/2023 1800)");
                 }
-                // CHANGED: Append the result from taskManager.addTask for a new Deadline.
+                // Validate date format by trying to parse it
+                try {
+                    LocalDateTime.parse(parts[1], INPUT_FORMATTER);
+                } catch (DateTimeParseException e) {
+                    throw new IllegalArgumentException(
+                        "date must be in d/M/yyyy HHmm format (e.g., 2/12/2023 1800)");
+                }
                 response.append(taskManager.addTask(new Deadline(parts[0], parts[1])));
             } else if (input.startsWith("list date ")) {
                 String date = input.substring(10).trim();
@@ -67,7 +79,21 @@ public class JacobMalon {
                 response.append(taskManager.listTasksByDate(date));
             } else if (input.startsWith("event ")) {
                 String[] parts = input.substring(6).split(" /from | /to ", 3);
-                // CHANGED: Append the result from taskManager.addTask for a new Event.
+                if (parts.length < 3) {
+                    throw new IllegalArgumentException(
+                        "event command must be followed by description and timing (e.g., event team meeting /from 2/12/2023 1400 /to 2/12/2023 1600)");
+                }
+                // Validate both dates
+                try {
+                    LocalDateTime from = LocalDateTime.parse(parts[1], INPUT_FORMATTER);
+                    LocalDateTime to = LocalDateTime.parse(parts[2], INPUT_FORMATTER);
+                    if (!from.isBefore(to)) {
+                        throw new IllegalArgumentException("Event start time must be before end time");
+                    }
+                } catch (DateTimeParseException e) {
+                    throw new IllegalArgumentException(
+                        "dates must be in d/M/yyyy HHmm format (e.g., 2/12/2023 1400)");
+                }
                 response.append(taskManager.addTask(new Event(parts[0], parts[1], parts[2])));
             } else if (input.startsWith("find ")) {
                 String keyword = input.substring(5).trim();
