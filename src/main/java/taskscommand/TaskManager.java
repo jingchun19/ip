@@ -223,6 +223,11 @@ public class TaskManager {
     private void loadFromFile() {
         File file = new File(STORAGE_FILE);
         if (!file.exists()) {
+            try {
+                file.createNewFile();
+            } catch (IOException e) {
+                throw new RuntimeException("Error creating storage file: " + e.getMessage());
+            }
             return;
         }
 
