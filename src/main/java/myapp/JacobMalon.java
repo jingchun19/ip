@@ -50,7 +50,7 @@ public class JacobMalon {
                 // Append the result from taskManager.unmarkTask.
                 response.append(taskManager.unmarkTask(Integer.parseInt(input.split(" ")[1])));
             } else if (input.startsWith("delete ")) {
-                // CHANGED: Append the result from taskManager.deleteTask.
+                // Append the result from taskManager.deleteTask.
                 response.append(taskManager.deleteTask(Integer.parseInt(input.split(" ")[1])));
             } else if (input.startsWith("todo ")) {
                 String taskDescription = input.substring(5).trim();
