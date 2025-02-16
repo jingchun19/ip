@@ -28,11 +28,11 @@ public class Deadline extends Task {
 
     /**
      * Returns the deadline date and time.
-     * @return The deadline date and time.
+     * @return The deadline date and time in d/M/yyyy HHmm format.
      */
-    public LocalDateTime getDeadline() {
+    public String getDeadline() {
         assert by != null : "Deadline date/time should never be null";
-        return by;
+        return by.format(INPUT_FORMATTER);
     }
 
     @Override

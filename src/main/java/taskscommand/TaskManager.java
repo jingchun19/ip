@@ -205,10 +205,18 @@ public class TaskManager {
     private void saveToFile() {
         try (PrintWriter writer = new PrintWriter(STORAGE_FILE)) {
             for (Task task : tasks) {
-                writer.println(task.toString());
+                if (task instanceof ToDo) {
+                    writer.println("todo " + task.getDescription());
+                } else if (task instanceof Deadline) {
+                    Deadline deadline = (Deadline) task;
+                    writer.println("deadline " + deadline.getDescription() + " /by " + deadline.getDeadline());
+                } else if (task instanceof Event) {
+                    Event event = (Event) task;
+                    writer.println("event " + event.getDescription() + " /from " + event.getFrom() + " /to " + event.getTo());
+                }
             }
         } catch (IOException e) {
-            System.out.println("Error saving to file: " + e.getMessage());
+            throw new RuntimeException("Error saving to file: " + e.getMessage());
         }
     }
 
@@ -221,15 +229,25 @@ public class TaskManager {
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
             String line;
             while ((line = reader.readLine()) != null) {
-                parseAndAddTask(line);
+                if (!line.trim().isEmpty()) {
+                    if (line.startsWith("todo ")) {
+                        tasks.add(new ToDo(line.substring(5)));
+                    } else if (line.startsWith("deadline ")) {
+                        String[] parts = line.substring(9).split(" /by ", 2);
+                        String description = parts[0];
+                        String date = parts[1];
+                        tasks.add(new Deadline(description, date));
+                    } else if (line.startsWith("event ")) {
+                        String[] parts = line.substring(6).split(" /from | /to ", 3);
+                        String description = parts[0];
+                        String fromDate = parts[1];
+                        String toDate = parts[2];
+                        tasks.add(new Event(description, fromDate, toDate));
+                    }
+                }
             }
         } catch (IOException e) {
-            System.out.println("Error loading from file: " + e.getMessage());
+            throw new RuntimeException("Error loading from file: " + e.getMessage());
         }
-    }
-
-    private void parseAndAddTask(String line) {
-        // Implementation of task parsing logic
-        // This would need to be implemented based on your task format
     }
 }

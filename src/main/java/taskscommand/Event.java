@@ -24,22 +24,20 @@ public class Event extends Task {
 
     /**
      * Gets the start time of the event.
-     *
-     * @return The LocalDateTime representing when the event starts
+     * @return The start time in d/M/yyyy HHmm format
      */
-    public LocalDateTime getFrom() {
+    public String getFrom() {
         assert from != null : "Event start time should never be null";
-        return from;
+        return from.format(INPUT_FORMATTER);
     }
 
     /**
      * Gets the end time of the event.
-     *
-     * @return The LocalDateTime representing when the event ends
+     * @return The end time in d/M/yyyy HHmm format
      */
-    public LocalDateTime getTo() {
+    public String getTo() {
         assert to != null : "Event end time should never be null";
-        return to;
+        return to.format(INPUT_FORMATTER);
     }
 
     @Override

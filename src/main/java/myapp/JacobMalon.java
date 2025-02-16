@@ -1,6 +1,9 @@
 package myapp;
 
-import taskscommand.*;
+import taskscommand.Deadline;
+import taskscommand.Event;
+import taskscommand.TaskManager;
+import taskscommand.ToDo;
 
 /**
  * The main class for the JacobMalon chatbot application.
@@ -26,6 +29,8 @@ public class JacobMalon {
         try {
             if (input.equals("bye")) {
                 response.append("Bye. Hope to see you again soon!");
+                wait(3000);
+                System.exit(0);  // Close the application
             } else if (input.equals("list")) {
                 // CHANGED: Now using taskManager.listTasks() that returns a string instead of printing to the terminal.
                 response.append(taskManager.listTasks());
