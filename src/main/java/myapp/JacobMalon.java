@@ -47,7 +47,7 @@ public class JacobMalon {
                 // Append the result from taskManager.markTask instead of printing.
                 response.append(taskManager.markTask(Integer.parseInt(parts[1])));
             } else if (input.startsWith("unmark ")) {
-                // CHANGED: Append the result from taskManager.unmarkTask.
+                // Append the result from taskManager.unmarkTask.
                 response.append(taskManager.unmarkTask(Integer.parseInt(input.split(" ")[1])));
             } else if (input.startsWith("delete ")) {
                 // CHANGED: Append the result from taskManager.deleteTask.
