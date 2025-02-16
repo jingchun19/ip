@@ -11,6 +11,7 @@ import taskscommand.ToDo;
 public class JacobMalon {
     private static final String CHATBOT_NAME = "Jacob";
     private final TaskManager taskManager;
+    public boolean isExit = false;
 
     /**
      * Constructs a new JacobMalon instance.
@@ -29,8 +30,7 @@ public class JacobMalon {
         try {
             if (input.equals("bye")) {
                 response.append("Bye. Hope to see you again soon!");
-                wait(3000);
-                System.exit(0);  // Close the application
+                isExit = true;
             } else if (input.equals("list")) {
                 // CHANGED: Now using taskManager.listTasks() that returns a string instead of printing to the terminal.
                 response.append(taskManager.listTasks());
