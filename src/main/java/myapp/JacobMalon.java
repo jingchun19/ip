@@ -57,7 +57,7 @@ public class JacobMalon {
                 if (taskDescription.isEmpty()) {
                     throw new IllegalArgumentException("The description of a todo cannot be empty.");
                 }
-                // CHANGED: Append the result from taskManager.addTask for a new ToDo.
+                // Append the result from taskManager.addTask for a new ToDo.
                 response.append(taskManager.addTask(new ToDo(taskDescription)));
             } else if (input.startsWith("deadline ")) {
                 String[] parts = input.substring(9).split(" /by ", 2);
